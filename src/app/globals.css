@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Warm & Soft Color Palette */
+  --primary: #FF8E5E;
+  /* Vivid Soft Orange for actions */
+  --primary-hover: #FF7043;
+  --secondary: #FFD4C2;
+  /* Pale Orange for backgrounds */
+  --background: #FFF9F5;
+  /* Warm White */
+  --surface: #FFFFFF;
+  /* Card Background */
+  --text-main: #4A3B32;
+  /* Dark Brown for readability */
+  --text-sub: #9C8C81;
+  /* Soft Gray-Brown */
+
+  --monster-blue: #7CD0E0;
+  /* Reference Image Monster Blue */
+  --monster-green: #A8E6CF;
+
+  --shadow-sm: 0 4px 12px rgba(255, 142, 94, 0.1);
+  --shadow-md: 0 8px 24px rgba(74, 59, 50, 0.08);
+
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-main);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Mobile-First Layout Container */
+main {
+  width: 100%;
+  max-width: 480px;
+  /* Mobile App Width */
+  background-color: var(--background);
+  min-height: 100vh;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+/* Utility Classes */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: white;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 142, 94, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 142, 94, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Glassmorphism Effect for Overlays */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
