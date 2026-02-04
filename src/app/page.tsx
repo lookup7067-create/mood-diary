@@ -3,7 +3,7 @@
 import { Settings, Calendar as CalendarIcon, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
+import Link from 'next/link';
 import Image from 'next/image';
 
 interface MoodData {
@@ -238,7 +238,13 @@ export default function Home() {
                 </div>
             </div>
 
-            <div className="fixed bottom-8 left-0 right-0 flex justify-center px-4 pointer-events-none z-50">
+            <div className="fixed bottom-8 left-0 right-0 flex flex-col items-center gap-3 px-4 pointer-events-none z-50">
+                <Link
+                    href="/list"
+                    className="bg-white/90 backdrop-blur-sm text-text-sub font-bold text-sm py-3 px-6 rounded-full shadow-md border border-gray-100 hover:bg-gray-50 active:scale-95 transition-all pointer-events-auto flex items-center gap-2"
+                >
+                    📖 한 줄 일기장 모아보기
+                </Link>
                 <button
                     className="btn-primary w-full max-w-[400px] shadow-lg text-lg pointer-events-auto hover:scale-105 active:scale-95 transition-all"
                     onClick={() => router.push('/log')}
