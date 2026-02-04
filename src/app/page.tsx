@@ -262,46 +262,43 @@ export default function Home() {
                         <h2 className="text-xl font-bold mb-6 text-center">{currentMonth}월의 감정 리포트</h2>
 
                         <div className="space-y-6">
-                            {/* Pie Chart Representation */}
-                            <div className="flex justify-center">
-                                <div className="relative w-40 h-40 rounded-full"
-                                    style={{
-                                        background: `conic-gradient(${monthlyStats.stats.map((s, i, arr) => {
-                                            const prev = arr.slice(0, i).reduce((acc, curr) => acc + curr.percentage, 0);
-                                            return `${s.color} ${prev}% ${prev + s.percentage}%`;
-                                        }).join(', ')
-                                            })`
-                                    }}
-                                >
-                                    <div className="absolute inset-4 bg-white rounded-full flex flex-col items-center justify-center shadow-inner">
-                                        <span className="text-xs text-text-sub">총 기록</span>
-                                        <span className="text-2xl font-bold text-primary">{monthlyStats.total}일</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Legend / List */}
-                            <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                            {/* Bar Chart Representation */}
+                            <div className="space-y-4">
                                 {monthlyStats.stats.map((stat) => (
-                                    <div key={stat.type} className="flex items-center justify-between p-2 rounded-xl bg-gray-50">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stat.color }} />
-                                            <span className="text-sm font-bold text-text-main">{stat.label}</span>
+                                    <div key={stat.type} className="space-y-1">
+                                        <div className="flex justify-between items-center text-sm mb-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-lg">{
+                                                    { joy: '😊', happy: '😊', sad: '☁️', angry: '😠', tired: '🫠', calm: '😌', anxious: '😟' }[stat.type] || '😐'
+                                                }</span>
+                                                <span className="font-bold text-text-main">{stat.label}</span>
+                                            </div>
+                                            <span className="text-gray-500 font-medium">{stat.count}일 ({stat.percentage}%)</span>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm font-bold text-primary">{stat.count}일</span>
-                                            <span className="text-xs text-text-sub w-8 text-right">{stat.percentage}%</span>
+                                        <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                                            <div
+                                                className="h-full rounded-full transition-all duration-1000 ease-out"
+                                                style={{
+                                                    width: `${stat.percentage}%`,
+                                                    backgroundColor: stat.color
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
-                            <p className="text-center text-xs text-text-sub bg-orange-50 p-3 rounded-xl border border-orange-100">
-                                {monthlyStats.topMood.label === '기쁨' ? '이번 달은 행복한 날이 많았네요! 🌻' :
-                                    monthlyStats.topMood.label === '슬픔' ? '위로가 필요한 날들이 있었군요. ☁️' :
-                                        monthlyStats.topMood.label === '화남' ? '스트레스 관리가 필요한 달이었어요. 🔥' :
-                                            '다양한 감정들이 함께한 한 달이었어요.'}
-                            </p>
+                            <div className="pt-4 border-t border-gray-100 text-center">
+                                <p className="text-text-sub text-sm">
+                                    지금까지 총 <span className="text-primary font-bold text-lg">{monthlyStats.total}</span>개의 감정을 모았어요!
+                                </p>
+                                <p className="text-xs text-text-sub mt-2 bg-orange-50 p-3 rounded-xl border border-orange-100">
+                                    {monthlyStats.topMood.label === '기쁨' ? '긍정적인 에너지가 가득하네요! ✨' :
+                                        monthlyStats.topMood.label === '슬픔' ? '토닥토닥, 따뜻한 위로를 보냅니다. 🍵' :
+                                            monthlyStats.topMood.label === '화남' ? '마음속 불꽃을 다스리는 중이군요. 🔥' :
+                                                '당신의 모든 감정은 소중해요. 🍀'}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
