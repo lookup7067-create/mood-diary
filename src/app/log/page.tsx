@@ -104,6 +104,9 @@ function LogMoodContent() {
         { id: 'happy', label: '😊 기쁨', color: 'bg-yellow-100 border-yellow-300' },
         { id: 'sad', label: '☁️ 슬픔', color: 'bg-blue-100 border-blue-300' },
         { id: 'angry', label: '😠 화남', color: 'bg-red-100 border-red-300' },
+        { id: 'tired', label: '🫠 지침', color: 'bg-purple-100 border-purple-300' },
+        { id: 'calm', label: '😌 평온', color: 'bg-green-100 border-green-300' },
+        { id: 'anxious', label: '😟 걱정', color: 'bg-orange-100 border-orange-300' },
     ];
 
     return (
@@ -127,7 +130,7 @@ function LogMoodContent() {
                 </div>
 
                 {/* Mood Selection Buttons */}
-                <div className="flex justify-center gap-3 mb-6 animate-fade-in">
+                <div className="flex justify-center gap-3 mb-6 animate-fade-in flex-wrap">
                     {moods.map((m) => (
                         <button
                             key={m.id}

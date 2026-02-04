@@ -34,6 +34,27 @@ function ResultContent() {
             desc: '뜨거운 열정을 품고 있군요!\n화나는 일도 에너지로 바꿔버리는 멋진 친구예요.',
             color: 'bg-red-50',
             icon: '😠'
+        },
+        tired: {
+            image: '/monster_tired.png',
+            name: '녹아내리는 멜팅이',
+            desc: '오늘 하루 너무 고생 많았어요.\n이 친구처럼 푹 늘어져서 충전할 시간이에요.',
+            color: 'bg-purple-50',
+            icon: '🫠'
+        },
+        calm: {
+            image: '/monster_calm.png',
+            name: '평화로운 숲숲이',
+            desc: '마음이 고요한 호수 같네요.\n따뜻한 차 한 잔 마시며 여유를 즐기세요.',
+            color: 'bg-green-50',
+            icon: '😌'
+        },
+        anxious: {
+            image: '/monster_anxious.png',
+            name: '소심한 걱정이',
+            desc: '괜찮아요, 아무 일도 일어나지 않을 거예요.\n이 친구가 당신의 걱정을 대신 먹어줄게요.',
+            color: 'bg-orange-50',
+            icon: '😟'
         }
     };
 
