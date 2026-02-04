@@ -53,12 +53,12 @@ function LogMoodContent() {
         if (!moodText) return;
 
         const keywords: Record<string, string[]> = {
-            happy: ['기쁨', '행복', '좋아', '신나', '최고', '웃겨', '즐거', 'happy', 'good'],
-            sad: ['슬퍼', '우울', '눈물', '속상', '힘들', '아파', 'sad', 'cry'],
-            angry: ['화나', '짜증', '열받', '미워', 'angry', 'mad'],
-            tired: ['피곤', '지쳐', '졸려', '힘없', 'tired', 'sleep', 'exhausted'],
-            calm: ['평온', '편안', '휴식', '느긋', 'calm', 'relax'],
-            anxious: ['걱정', '불안', '긴장', '무서', 'anxious', 'scared', 'worry']
+            happy: ['기쁨', '행복', '좋아', '신나', '최고', '웃겨', '즐거', 'happy', 'good', '감사', '뿌듯', '만족'],
+            sad: ['슬퍼', '우울', '눈물', '속상', '힘들', '아파', 'sad', 'cry', '괴로', '외로', '절망'],
+            angry: ['화나', '짜증', '열받', '미워', 'angry', 'mad', '분노', '빡쳐'],
+            tired: ['피곤', '지쳐', '졸려', '힘없', 'tired', 'sleep', 'exhausted', '방전', '힘드', '녹초'],
+            calm: ['평온', '편안', '휴식', '느긋', 'calm', 'relax', '편해', '편하', '차분', '잔잔', '고요', '안정'],
+            anxious: ['걱정', '불안', '긴장', '무서', 'anxious', 'scared', 'worry', '두려', '떨려', '초조']
         };
 
         for (const [mood, words] of Object.entries(keywords)) {
