@@ -48,6 +48,27 @@ function LogMoodContent() {
         }
     }, [dateParam]);
 
+    // 키워드 기반 감정 자동 감지
+    useEffect(() => {
+        if (!moodText) return;
+
+        const keywords: Record<string, string[]> = {
+            happy: ['기쁨', '행복', '좋아', '신나', '최고', '웃겨', '즐거', 'happy', 'good'],
+            sad: ['슬퍼', '우울', '눈물', '속상', '힘들', '아파', 'sad', 'cry'],
+            angry: ['화나', '짜증', '열받', '미워', 'angry', 'mad'],
+            tired: ['피곤', '지쳐', '졸려', '힘없', 'tired', 'sleep', 'exhausted'],
+            calm: ['평온', '편안', '휴식', '느긋', 'calm', 'relax'],
+            anxious: ['걱정', '불안', '긴장', '무서', 'anxious', 'scared', 'worry']
+        };
+
+        for (const [mood, words] of Object.entries(keywords)) {
+            if (words.some(word => moodText.includes(word))) {
+                setSelectedMood(mood);
+                break; // 하나 찾으면 멈춤 (우선순위: 위에서 아래)
+            }
+        }
+    }, [moodText]);
+
     // Speech Recognition Setup
     useEffect(() => {
         if (typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)) {

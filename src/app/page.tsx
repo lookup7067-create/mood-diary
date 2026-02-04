@@ -99,11 +99,11 @@ export default function Home() {
 
     const monthlyStats = getMonthlyStats();
 
-    const monsters = [
-        { id: 1, name: '햇살이', color: '#FFD700', type: 'joy' },
-        { id: 2, name: '산들바람', color: '#89CFF0', type: 'calm' },
-        { id: 3, name: '투덜이', color: '#FF6B6B', type: 'angry' },
-    ];
+    // 최근 만난 몬스터들 (최신순 5개)
+    const recentMonsters = Object.entries(moodLogs)
+        .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))
+        .slice(0, 5)
+        .map(([date, data]) => ({ date, ...data }));
 
     return (
         <div className="min-h-screen pb-28 relative">
@@ -213,14 +213,27 @@ export default function Home() {
                 <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
                     <h3 className="text-lg font-bold mb-4">최근 만난 몬스터들</h3>
                     <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                        {monsters.map((monster) => (
-                            <div key={monster.id} className="min-w-[120px] bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm border border-gray-100 cursor-pointer hover:-translate-y-1 transition-transform">
-                                <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl" style={{ backgroundColor: monster.color + '30' }}>
-                                    👾
+                        {recentMonsters.length > 0 ? (
+                            recentMonsters.map((monster, idx) => (
+                                <div key={`${monster.date}-${idx}`} className="min-w-[120px] bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm border border-gray-100 cursor-pointer hover:-translate-y-1 transition-transform">
+                                    <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl relative overflow-hidden bg-gray-50 border-2 border-white shadow-inner`}>
+                                        {monster.image ? (
+                                            <Image src={monster.image} alt={monster.monsterName || 'monster'} fill className="object-contain p-2" />
+                                        ) : (
+                                            monster.icon
+                                        )}
+                                    </div>
+                                    <div className="text-center">
+                                        <span className="block font-bold text-sm text-text-main line-clamp-1">{monster.monsterName || '이름 없음'}</span>
+                                        <span className="block text-[10px] text-gray-400 mt-1">{monster.date}</span>
+                                    </div>
                                 </div>
-                                <span className="font-bold text-sm text-text-main">{monster.name}</span>
+                            ))
+                        ) : (
+                            <div className="w-full text-center py-8 text-gray-400 text-sm bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                                아직 만난 몬스터가 없어요.<br />오늘의 기분을 기록해보세요!
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
             </div>
