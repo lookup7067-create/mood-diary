@@ -4,7 +4,7 @@ import { ArrowLeft, Share2, Download, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 
 function ResultContent() {
     const router = useRouter();
@@ -13,63 +13,94 @@ function ResultContent() {
     const moodParam = searchParams.get('mood') || 'happy';
     const contentParam = searchParams.get('content') || '';
 
+    const [finalMonster, setFinalMonster] = useState<any>(null);
+
     const moodData: Record<string, any> = {
         happy: {
-            image: '/monster_happy.png',
             name: '햇살 가득 몽글이',
             desc: '당신의 밝은 미소를 닮아 온몸에서 빛이 나요.\n오늘 하루도 정말 반짝거렸군요!',
             color: 'bg-yellow-50',
-            icon: '😊'
+            icon: '😊',
+            variants: [
+                { image: '/monster_happy.png', desc: '당신의 밝은 미소를 닮아 온몸에서 빛이 나요.\n오늘 하루도 정말 반짝거렸군요!' },
+                { image: '/monster_happy_var1.png', desc: '오늘은 특별한 날인가요? 파티 분위기가 물씬 나네요!\n즐거움이 팡팡 터지는 하루였군요.' }
+            ]
         },
         sad: {
-            image: '/monster.png',
             name: '포근한 구름이',
             desc: '당신의 차분한 마음을 조용히 안아주는 친구예요.\n가끔은 쉬어가도 괜찮아요.',
             color: 'bg-blue-50',
-            icon: '☁️'
+            icon: '☁️',
+            variants: [
+                { image: '/monster.png', desc: '당신의 차분한 마음을 조용히 안아주는 친구예요.\n가끔은 쉬어가도 괜찮아요.' },
+                { image: '/monster_sad_var1.png', desc: '마음이 조금 지쳤나요?\n이 친구가 곰인형과 함께 당신을 따뜻하게 위로해 줄 거예요.' }
+            ]
         },
         angry: {
-            image: '/monster_angry.png',
             name: '불꽃 씩씩이',
             desc: '뜨거운 열정을 품고 있군요!\n화나는 일도 에너지로 바꿔버리는 멋진 친구예요.',
             color: 'bg-red-50',
-            icon: '😠'
+            icon: '😠',
+            variants: [
+                { image: '/monster_angry.png', desc: '뜨거운 열정을 품고 있군요!\n화나는 일도 에너지로 바꿔버리는 멋진 친구예요.' },
+                { image: '/monster_angry_var1.png', desc: '머리에서 김이 날 정도로 화가 났군요!\n이 친구와 함께 크게 소리치고 털어버리세요.' }
+            ]
         },
         tired: {
-            image: '/monster_tired.png',
             name: '녹아내리는 멜팅이',
             desc: '오늘 하루 너무 고생 많았어요.\n이 친구처럼 푹 늘어져서 충전할 시간이에요.',
             color: 'bg-purple-50',
-            icon: '🫠'
+            icon: '🫠',
+            variants: [
+                { image: '/monster_tired.png', desc: '오늘 하루 너무 고생 많았어요.\n이 친구처럼 푹 늘어져서 충전할 시간이에요.' },
+                { image: '/monster_tired_var1.png', desc: '지금 당장 침대가 필요해 보이네요.\n수면 모자를 쓴 멜팅이와 함께 꿀잠 자러 가요.' }
+            ]
         },
         calm: {
-            image: '/monster_calm.png',
             name: '평화로운 숲숲이',
             desc: '마음이 고요한 호수 같네요.\n따뜻한 차 한 잔 마시며 여유를 즐기세요.',
             color: 'bg-green-50',
-            icon: '😌'
+            icon: '😌',
+            variants: [
+                { image: '/monster_calm.png', desc: '마음이 고요한 호수 같네요.\n따뜻한 차 한 잔 마시며 여유를 즐기세요.' },
+                { image: '/monster_calm_var1.png', desc: '좋아하는 음악과 함께하는 휴식인가요?\n지금 이 순간의 평온함을 마음껏 즐기세요.' }
+            ]
         },
         anxious: {
-            image: '/monster_anxious.png',
             name: '소심한 걱정이',
             desc: '괜찮아요, 아무 일도 일어나지 않을 거예요.\n이 친구가 당신의 걱정을 대신 먹어줄게요.',
             color: 'bg-orange-50',
-            icon: '😟'
+            icon: '😟',
+            variants: [
+                { image: '/monster_anxious.png', desc: '괜찮아요, 아무 일도 일어나지 않을 거예요.\n이 친구가 당신의 걱정을 대신 먹어줄게요.' },
+                { image: '/monster_anxious_var1.png', desc: '세상이 조금 무섭게 느껴진다면 잠시 숨어도 괜찮아요.\n상자 안은 안전하고 포근하니까요.' }
+            ]
         }
     };
 
-    const currentMonster = moodData[moodParam] || moodData.happy;
+    useEffect(() => {
+        const baseData = moodData[moodParam] || moodData.happy;
+        const randomVariant = baseData.variants[Math.floor(Math.random() * baseData.variants.length)];
+
+        setFinalMonster({
+            ...baseData,
+            image: randomVariant.image,
+            desc: randomVariant.desc
+        });
+    }, [moodParam]);
 
     const handleSave = () => {
+        if (!finalMonster) return;
+
         const savedLogs = localStorage.getItem('moodLogs');
         const logs = savedLogs ? JSON.parse(savedLogs) : {};
 
         logs[dateParam] = {
             type: moodParam,
-            icon: currentMonster.icon,
-            image: currentMonster.image,
-            color: currentMonster.color,
-            monsterName: currentMonster.name,
+            icon: finalMonster.icon,
+            image: finalMonster.image,
+            color: finalMonster.color,
+            monsterName: finalMonster.name,
             content: contentParam
         };
 
@@ -77,8 +108,10 @@ function ResultContent() {
         router.push('/');
     };
 
+    if (!finalMonster) return <div className="min-h-screen bg-white flex items-center justify-center">Loading...</div>;
+
     return (
-        <div className={`min-h-screen flex flex-col relative transition-colors duration-500 ${currentMonster.color}`}>
+        <div className={`min-h-screen flex flex-col relative transition-colors duration-500 ${finalMonster.color}`}>
             {/* Header */}
             <header className="p-6 pt-8 flex items-center justify-between text-text-main z-10">
                 <Link href="/hatch">
@@ -95,7 +128,7 @@ function ResultContent() {
 
                     <div className="relative z-10 my-4 w-64 h-64">
                         <Image
-                            src={currentMonster.image}
+                            src={finalMonster.image}
                             alt="Generated Mood Monster"
                             fill
                             className="object-contain drop-shadow-lg"
@@ -103,9 +136,9 @@ function ResultContent() {
                     </div>
 
                     <div className="relative z-10 mt-2">
-                        <h2 className="text-2xl font-bold text-text-main mb-2">'{currentMonster.name}'를 만나보세요</h2>
+                        <h2 className="text-2xl font-bold text-text-main mb-2">'{finalMonster.name}'를 만나보세요</h2>
                         <p className="text-text-sub text-sm leading-relaxed px-4 whitespace-pre-line">
-                            {currentMonster.desc}
+                            {finalMonster.desc}
                         </p>
                     </div>
                 </div>
