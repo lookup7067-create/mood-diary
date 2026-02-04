@@ -3,7 +3,26 @@
 import { Mic, ArrowLeft, Wand2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
+
+// Type definitions for Web Speech API
+interface SpeechRecognition extends EventTarget {
+    continuous: boolean;
+    interimResults: boolean;
+    lang: string;
+    start: () => void;
+    stop: () => void;
+    onresult: (event: any) => void;
+    onerror: (event: any) => void;
+    onend: () => void;
+}
+
+declare global {
+    interface Window {
+        SpeechRecognition: any;
+        webkitSpeechRecognition: any;
+    }
+}
 
 function LogMoodContent() {
     const router = useRouter();
@@ -13,22 +32,69 @@ function LogMoodContent() {
     const [moodText, setMoodText] = useState('');
     const [selectedMood, setSelectedMood] = useState('happy'); // 기본값: 기쁨
     const [isListening, setIsListening] = useState(false);
+    const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
 
-    // Mock Voice Input
-    const toggleListening = () => {
-        setIsListening(!isListening);
-        if (!isListening) {
-            setTimeout(() => {
-                setMoodText("오늘 날씨가 너무 좋아서 산책을 다녀왔어. 기분이 상쾌해!");
+    // Initial Load for Past Data
+    useEffect(() => {
+        if (dateParam) {
+            const savedLogs = localStorage.getItem('moodLogs');
+            if (savedLogs) {
+                const logs = JSON.parse(savedLogs);
+                if (logs[dateParam]) {
+                    setSelectedMood(logs[dateParam].type);
+                    setMoodText(logs[dateParam].content || '');
+                }
+            }
+        }
+    }, [dateParam]);
+
+    // Speech Recognition Setup
+    useEffect(() => {
+        if (typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const notification = new SpeechRecognition();
+            notification.continuous = false;
+            notification.interimResults = false;
+            notification.lang = 'ko-KR';
+
+            notification.onresult = (event: any) => {
+                const transcript = event.results[0][0].transcript;
+                setMoodText((prev) => prev ? `${prev} ${transcript}` : transcript);
                 setIsListening(false);
-            }, 2000);
+            };
+
+            notification.onerror = (event: any) => {
+                console.error("Speech recognition error", event.error);
+                setIsListening(false);
+            };
+
+            notification.onend = () => {
+                setIsListening(false);
+            };
+
+            setRecognition(notification);
+        }
+    }, []);
+
+    const toggleListening = () => {
+        if (!recognition) {
+            alert("이 브라우저는 음성 인식을 지원하지 않습니다.");
+            return;
+        }
+
+        if (isListening) {
+            recognition.stop();
+        } else {
+            recognition.start();
+            setIsListening(true);
         }
     };
 
     const handleSubmit = () => {
         const query = new URLSearchParams({
             ...(dateParam ? { date: dateParam } : {}),
-            mood: selectedMood
+            mood: selectedMood,
+            content: moodText
         }).toString();
 
         router.push(`/hatch?${query}`);

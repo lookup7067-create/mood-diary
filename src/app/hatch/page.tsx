@@ -9,6 +9,7 @@ function HatchContent() {
     const searchParams = useSearchParams();
     const dateParam = searchParams.get('date');
     const moodParam = searchParams.get('mood') || 'happy';
+    const contentParam = searchParams.get('content') || '';
 
     const [progress, setProgress] = useState(0);
 
@@ -19,7 +20,8 @@ function HatchContent() {
                     clearInterval(timer);
                     const query = new URLSearchParams({
                         ...(dateParam ? { date: dateParam } : {}),
-                        mood: moodParam
+                        mood: moodParam,
+                        content: contentParam
                     }).toString();
                     router.push(`/result?${query}`);
                     return 100;
@@ -29,7 +31,7 @@ function HatchContent() {
         }, 50);
 
         return () => clearInterval(timer);
-    }, [router, dateParam, moodParam]);
+    }, [router, dateParam, moodParam, contentParam]);
 
     return (
         <div className="min-h-screen bg-white flex flex-col items-center justify-center relative overflow-hidden px-6 text-center">

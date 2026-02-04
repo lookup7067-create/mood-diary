@@ -11,6 +11,7 @@ function ResultContent() {
     const searchParams = useSearchParams();
     const dateParam = searchParams.get('date') || new Date().toISOString().split('T')[0];
     const moodParam = searchParams.get('mood') || 'happy';
+    const contentParam = searchParams.get('content') || '';
 
     const moodData: Record<string, any> = {
         happy: {
@@ -47,7 +48,8 @@ function ResultContent() {
             icon: currentMonster.icon,
             image: currentMonster.image,
             color: currentMonster.color,
-            monsterName: currentMonster.name
+            monsterName: currentMonster.name,
+            content: contentParam
         };
 
         localStorage.setItem('moodLogs', JSON.stringify(logs));
