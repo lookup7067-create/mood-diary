@@ -20,6 +20,7 @@ export default function Home() {
     const [viewDate, setViewDate] = useState<Date | null>(null);
     const [today, setToday] = useState<Date | null>(null);
     const [moodLogs, setMoodLogs] = useState<Record<string, MoodData>>({});
+    const [showStatsModal, setShowStatsModal] = useState(false);
 
     useEffect(() => {
         const now = new Date();
@@ -97,7 +98,6 @@ export default function Home() {
     };
 
     const monthlyStats = getMonthlyStats();
-    const [showStatsModal, setShowStatsModal] = useState(false);
 
     const monsters = [
         { id: 1, name: '햇살이', color: '#FFD700', type: 'joy' },
