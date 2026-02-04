@@ -64,37 +64,40 @@ export default function Home() {
     };
 
     // 통계 계산 로직 (가장 자주 느낀 감정)
-    const getTopMood = () => {
+    const getMonthlyStats = () => {
         const currentMonthPrefix = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
         const monthlyKeys = Object.keys(moodLogs).filter(k => k.startsWith(currentMonthPrefix));
 
         if (monthlyKeys.length === 0) return null;
 
         const counts: Record<string, number> = {};
-        const typeToIcon: Record<string, string> = {};
-
         monthlyKeys.forEach(key => {
-            const { type, icon } = moodLogs[key];
+            const { type } = moodLogs[key];
             counts[type] = (counts[type] || 0) + 1;
-            typeToIcon[type] = icon;
         });
 
-        // 가장 많이 나온 감정 찾기
-        const topType = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+        const total = monthlyKeys.length;
+        const stats = Object.entries(counts)
+            .sort(([, a], [, b]) => b - a)
+            .map(([type, count]) => ({
+                type,
+                count,
+                percentage: Math.round((count / total) * 100),
+                label: {
+                    happy: '기쁨', sad: '슬픔', angry: '화남',
+                    tired: '지침', calm: '평온', anxious: '걱정'
+                }[type] || type,
+                color: {
+                    happy: '#FFD700', sad: '#89CFF0', angry: '#FF6B6B',
+                    tired: '#E0B0FF', calm: '#98FB98', anxious: '#FFDAB9'
+                }[type] || '#ccc'
+            }));
 
-        const labels: Record<string, string> = {
-            happy: '기쁨',
-            sad: '슬픔',
-            angry: '화남'
-        };
-
-        return {
-            label: labels[topType] || topType,
-            icon: typeToIcon[topType]
-        };
+        return { total, stats, topMood: stats[0] };
     };
 
-    const topMood = getTopMood();
+    const monthlyStats = getMonthlyStats();
+    const [showStatsModal, setShowStatsModal] = useState(false);
 
     const monsters = [
         { id: 1, name: '햇살이', color: '#FFD700', type: 'joy' },
@@ -129,14 +132,19 @@ export default function Home() {
 
             <div className="px-6 space-y-6">
                 {/* Stats Card */}
-                <div className="card flex justify-between items-center animate-fade-in">
+                <div
+                    className="card flex justify-between items-center animate-fade-in cursor-pointer hover:bg-orange-50 transition-colors"
+                    onClick={() => setShowStatsModal(true)}
+                >
                     <div>
-                        <p className="text-xs text-text-sub mb-1 font-medium">가장 자주 느낀 감정</p>
+                        <p className="text-xs text-text-sub mb-1 font-medium flex items-center gap-1">
+                            이번 달의 감정 <span className="bg-orange-100 text-primary text-[10px] px-1 rounded">분석 보기</span>
+                        </p>
                         <div className="flex items-center gap-2">
-                            {topMood ? (
+                            {monthlyStats ? (
                                 <>
-                                    <span className="text-lg font-bold text-text-main">{topMood.label}</span>
-                                    <span className="text-xl">{topMood.icon}</span>
+                                    <span className="text-lg font-bold text-text-main">{monthlyStats.topMood.label}</span>
+                                    <span className="text-sm text-text-sub">이 가장 많았어요</span>
                                 </>
                             ) : (
                                 <span className="text-sm text-gray-400">아직 기록이 없어요</span>
@@ -146,9 +154,8 @@ export default function Home() {
                     <div className="h-10 w-px bg-gray-200"></div>
                     <div>
                         <p className="text-xs text-text-sub mb-1 font-medium">기록된 일수</p>
-                        {/* 실제 기록된 날짜 수 계산 */}
                         <p className="text-lg font-bold text-text-main">
-                            {Object.keys(moodLogs).filter(k => k.startsWith(`${currentYear}-${String(currentMonth).padStart(2, '0')}`)).length}
+                            {monthlyStats?.total || 0}
                             <span className="text-sm font-normal text-text-sub"> / {daysInMonth}</span>
                         </p>
                     </div>
@@ -227,6 +234,65 @@ export default function Home() {
                     오늘의 기분 기록하기
                 </button>
             </div>
+
+            {/* Stats Modal */}
+            {showStatsModal && monthlyStats && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/40 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-white w-full max-w-sm rounded-[32px] p-6 shadow-2xl relative animate-slide-up">
+                        <button
+                            onClick={() => setShowStatsModal(false)}
+                            className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full"
+                        >
+                            ✕
+                        </button>
+
+                        <h2 className="text-xl font-bold mb-6 text-center">{currentMonth}월의 감정 리포트</h2>
+
+                        <div className="space-y-6">
+                            {/* Pie Chart Representation */}
+                            <div className="flex justify-center">
+                                <div className="relative w-40 h-40 rounded-full"
+                                    style={{
+                                        background: `conic-gradient(${monthlyStats.stats.map((s, i, arr) => {
+                                            const prev = arr.slice(0, i).reduce((acc, curr) => acc + curr.percentage, 0);
+                                            return `${s.color} ${prev}% ${prev + s.percentage}%`;
+                                        }).join(', ')
+                                            })`
+                                    }}
+                                >
+                                    <div className="absolute inset-4 bg-white rounded-full flex flex-col items-center justify-center shadow-inner">
+                                        <span className="text-xs text-text-sub">총 기록</span>
+                                        <span className="text-2xl font-bold text-primary">{monthlyStats.total}일</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Legend / List */}
+                            <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                                {monthlyStats.stats.map((stat) => (
+                                    <div key={stat.type} className="flex items-center justify-between p-2 rounded-xl bg-gray-50">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stat.color }} />
+                                            <span className="text-sm font-bold text-text-main">{stat.label}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-bold text-primary">{stat.count}일</span>
+                                            <span className="text-xs text-text-sub w-8 text-right">{stat.percentage}%</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <p className="text-center text-xs text-text-sub bg-orange-50 p-3 rounded-xl border border-orange-100">
+                                {monthlyStats.topMood.label === '기쁨' ? '이번 달은 행복한 날이 많았네요! 🌻' :
+                                    monthlyStats.topMood.label === '슬픔' ? '위로가 필요한 날들이 있었군요. ☁️' :
+                                        monthlyStats.topMood.label === '화남' ? '스트레스 관리가 필요한 달이었어요. 🔥' :
+                                            '다양한 감정들이 함께한 한 달이었어요.'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

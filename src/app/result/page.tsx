@@ -23,7 +23,8 @@ function ResultContent() {
             icon: '😊',
             variants: [
                 { image: '/monster_happy.png', desc: '당신의 밝은 미소를 닮아 온몸에서 빛이 나요.\n오늘 하루도 정말 반짝거렸군요!' },
-                { image: '/monster_happy_var1.png', desc: '오늘은 특별한 날인가요? 파티 분위기가 물씬 나네요!\n즐거움이 팡팡 터지는 하루였군요.' }
+                { image: '/monster_happy_var1.png', desc: '오늘은 특별한 날인가요? 파티 분위기가 물씬 나네요!\n즐거움이 팡팡 터지는 하루였군요.' },
+                { image: '/monster_happy_var2.png', desc: '와우! 당신은 오늘 진정한 챔피언이에요!\n스스로를 자랑스러워해도 충분한 하루군요.' }
             ]
         },
         sad: {
@@ -33,7 +34,8 @@ function ResultContent() {
             icon: '☁️',
             variants: [
                 { image: '/monster.png', desc: '당신의 차분한 마음을 조용히 안아주는 친구예요.\n가끔은 쉬어가도 괜찮아요.' },
-                { image: '/monster_sad_var1.png', desc: '마음이 조금 지쳤나요?\n이 친구가 곰인형과 함께 당신을 따뜻하게 위로해 줄 거예요.' }
+                { image: '/monster_sad_var1.png', desc: '마음이 조금 지쳤나요?\n이 친구가 곰인형과 함께 당신을 따뜻하게 위로해 줄 거예요.' },
+                { image: '/monster_sad_var2.png', desc: '비가 오는 날처럼 마음이 촉촉한가요?\n이 우산이 당신의 슬픔을 잠시 막아줄게요.' }
             ]
         },
         angry: {
@@ -43,7 +45,8 @@ function ResultContent() {
             icon: '😠',
             variants: [
                 { image: '/monster_angry.png', desc: '뜨거운 열정을 품고 있군요!\n화나는 일도 에너지로 바꿔버리는 멋진 친구예요.' },
-                { image: '/monster_angry_var1.png', desc: '머리에서 김이 날 정도로 화가 났군요!\n이 친구와 함께 크게 소리치고 털어버리세요.' }
+                { image: '/monster_angry_var1.png', desc: '머리에서 김이 날 정도로 화가 났군요!\n이 친구와 함께 크게 소리치고 털어버리세요.' },
+                { image: '/monster_angry_var2.png', desc: '이제 그만! 이라고 외치고 싶은 순간인가요?\n당신의 단호한 마음을 확성기로 크게 알려봐요.' }
             ]
         },
         tired: {
@@ -53,7 +56,8 @@ function ResultContent() {
             icon: '🫠',
             variants: [
                 { image: '/monster_tired.png', desc: '오늘 하루 너무 고생 많았어요.\n이 친구처럼 푹 늘어져서 충전할 시간이에요.' },
-                { image: '/monster_tired_var1.png', desc: '지금 당장 침대가 필요해 보이네요.\n수면 모자를 쓴 멜팅이와 함께 꿀잠 자러 가요.' }
+                { image: '/monster_tired_var1.png', desc: '지금 당장 침대가 필요해 보이네요.\n수면 모자를 쓴 멜팅이와 함께 꿀잠 자러 가요.' },
+                { image: '/monster_tired_var2.png', desc: '배터리가 0%가 되었군요...\n아무것도 하지 말고 푹 쉬는 게 최고의 처방약이에요.' }
             ]
         },
         calm: {
@@ -63,7 +67,8 @@ function ResultContent() {
             icon: '😌',
             variants: [
                 { image: '/monster_calm.png', desc: '마음이 고요한 호수 같네요.\n따뜻한 차 한 잔 마시며 여유를 즐기세요.' },
-                { image: '/monster_calm_var1.png', desc: '좋아하는 음악과 함께하는 휴식인가요?\n지금 이 순간의 평온함을 마음껏 즐기세요.' }
+                { image: '/monster_calm_var1.png', desc: '좋아하는 음악과 함께하는 휴식인가요?\n지금 이 순간의 평온함을 마음껏 즐기세요.' },
+                { image: '/monster_calm_var2.png', desc: '구름 위에 둥둥 떠있는 기분인가요?\n아무 생각 없이 이 편안함을 즐겨보세요.' }
             ]
         },
         anxious: {
@@ -73,7 +78,8 @@ function ResultContent() {
             icon: '😟',
             variants: [
                 { image: '/monster_anxious.png', desc: '괜찮아요, 아무 일도 일어나지 않을 거예요.\n이 친구가 당신의 걱정을 대신 먹어줄게요.' },
-                { image: '/monster_anxious_var1.png', desc: '세상이 조금 무섭게 느껴진다면 잠시 숨어도 괜찮아요.\n상자 안은 안전하고 포근하니까요.' }
+                { image: '/monster_anxious_var1.png', desc: '세상이 조금 무섭게 느껴진다면 잠시 숨어도 괜찮아요.\n상자 안은 안전하고 포근하니까요.' },
+                { image: '/monster_anxious_var2.png', desc: '손톱을 물어뜯을 만큼 걱정이 되나요?\n괜찮아요, 이 친구와 함께 천천히 심호흡을 해봐요.' }
             ]
         }
     };
